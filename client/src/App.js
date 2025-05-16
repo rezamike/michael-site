@@ -12,6 +12,9 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const MIN_DURATION = 1000; // in ms (1 second)
+    const start = Date.now();
+  
     try {
       console.log("Submitting email:", email);
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/waitlist`, {
@@ -19,28 +22,30 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
-
-      console.log("Raw response:", res);
+  
       const data = await res.json();
-      console.log("Parsed response:", data);
-
-      if (res.ok) {
-        setMessage(data.message || 'Thanks, you’re on the list!');
-        setSubmitted(true);
+      const elapsed = Date.now() - start;
+      const delay = Math.max(0, MIN_DURATION - elapsed);
+  
+      setTimeout(() => {
+        if (res.ok) {
+          setMessage(data.message || 'Thanks, you’re on the list!');
+          setSubmitted(true);
+        } else {
+          setMessage(data.message || 'Something went wrong. Try again?');
+        }
         setLoading(false);
-      } else {
-        setMessage(data.message || 'Something went wrong. Try again?');
-        setLoading(false);
-      }
+      }, delay);
     } catch (err) {
       console.error("Submission error:", err);
-
-      if (err.code === 11000) {
-        setMessage('This email is already on the waitlist.');
-      } else {
-        setMessage('Could not connect to the server.');
-      }
-      setLoading(false);
+      setTimeout(() => {
+        if (err.code === 11000) {
+          setMessage('This email is already on the waitlist.');
+        } else {
+          setMessage('Could not connect to the server.');
+        }
+        setLoading(false);
+      }, 300); // short fallback delay for errors
     }
   };
 
@@ -63,7 +68,9 @@ function App() {
         </form>
       )}
       {loading && (
-        <p className="loading-text">Thinking<span className="dots">.</span></p>
+        <div className="loading-container">
+          <p className="loading-text">Thinking<span className="dots">.</span></p>
+        </div>
       )}
       {message && <p className="thank-you">{message}</p>}
     </div>
