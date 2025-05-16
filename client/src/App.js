@@ -10,18 +10,26 @@ function App() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('https://michael-api.onrender.com/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    });
-  
-    const data = await res.json();
-    if (res.ok) {
-      setMessage(data.message || 'Thanks, you’re on the list!');
-      setSubmitted(true);
-    } else {
-      setMessage(data.message || 'Something went wrong. Try again?');
+    try {
+      console.log("Submitting email:", email);
+      const res = await fetch('https://michael-api.onrender.com/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await res.json();
+      console.log("Response received:", data);
+
+      if (res.ok) {
+        setMessage(data.message || 'Thanks, you’re on the list!');
+        setSubmitted(true);
+      } else {
+        setMessage(data.message || 'Something went wrong. Try again?');
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setMessage("Could not connect to the server.");
     }
   };
 
