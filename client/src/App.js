@@ -6,10 +6,12 @@ function App() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const textArray = ["No advice.", "No judgment.", "No history saved.", "Just a space to say what you can’t say anywhere else."];
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       console.log("Submitting email:", email);
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/waitlist`, {
@@ -25,12 +27,20 @@ function App() {
       if (res.ok) {
         setMessage(data.message || 'Thanks, you’re on the list!');
         setSubmitted(true);
+        setLoading(false);
       } else {
         setMessage(data.message || 'Something went wrong. Try again?');
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Submission error:", error);
-      setMessage("Could not connect to the server.");
+    } catch (err) {
+      console.error("Submission error:", err);
+
+      if (err.code === 11000) {
+        setMessage('This email is already on the waitlist.');
+      } else {
+        setMessage('Could not connect to the server.');
+      }
+      setLoading(false);
     }
   };
 
@@ -51,6 +61,9 @@ function App() {
           />
           <button type="submit">Join the Waitlist</button>
         </form>
+      )}
+      {loading && (
+        <p className="loading-text">Thinking<span className="dots">.</span></p>
       )}
       {message && <p className="thank-you">{message}</p>}
     </div>
