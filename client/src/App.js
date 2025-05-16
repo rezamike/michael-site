@@ -5,19 +5,24 @@ import "./App.css";
 function App() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const textArray = ["No advice.", "No judgment.", "No history.", "Just a space to say what you can’t say anywhere else."];
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/waitlist`, {
+    const res = await fetch('https://michael-api.onrender.com/api/waitlist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
   
     const data = await res.json();
-    if (res.ok) setMessage(data.message || 'Thanks, you’re on the list!');
-    else setMessage(data.message || 'Something went wrong. Try again?');
+    if (res.ok) {
+      setMessage(data.message || 'Thanks, you’re on the list!');
+      setSubmitted(true);
+    } else {
+      setMessage(data.message || 'Something went wrong. Try again?');
+    }
   };
 
   return (
@@ -26,7 +31,7 @@ function App() {
       <p>
         <Fader textArray={textArray} />
       </p>
-      {!message && (
+      {!submitted && (
         <form onSubmit={handleSubmit}>
           <input
             type="email"
