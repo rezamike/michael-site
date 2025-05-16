@@ -26,16 +26,18 @@ function App() {
       <p>
         <Fader textArray={textArray} />
       </p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button type="submit">Join the Waitlist</button>
-      </form>
+      {!message && (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button type="submit">Join the Waitlist</button>
+        </form>
+      )}
       {message && <p className="thank-you">{message}</p>}
     </div>
   );
