@@ -9,14 +9,15 @@ function App() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/waitlist", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/waitlist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
     });
+  
     const data = await res.json();
-    setMessage(data.message);
-    setEmail("");
+    if (res.ok) setMessage('Thanks, you’re on the list!');
+    else setMessage('Something went wrong. Try again?');
   };
 
   return (
