@@ -60,6 +60,10 @@ body {
   box-sizing: border-box;
 }
 
+.container {
+  width: 28em;
+}
+
 p, form, .thank-you {
   animation: fadeSlideUp 1s ease-out forwards;
   opacity: 0;
