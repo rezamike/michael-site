@@ -16,8 +16,8 @@ function App() {
     });
   
     const data = await res.json();
-    if (res.ok) setMessage('Thanks, you’re on the list!');
-    else setMessage('Something went wrong. Try again?');
+    if (res.ok) setMessage(data.message || 'Thanks, you’re on the list!');
+    else setMessage(data.message || 'Something went wrong. Try again?');
   };
 
   return (
