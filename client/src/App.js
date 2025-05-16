@@ -12,7 +12,7 @@ function App() {
     e.preventDefault();
     try {
       console.log("Submitting email:", email);
-      const res = await fetch('https://michael-api.onrender.com/api/waitlist', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/waitlist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
