@@ -6,7 +6,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const textArray = ["No advice.", "No judgment.", "No history.", "Just a space to say what you can’t say anywhere else."];
+  const textArray = ["No advice.", "No judgment.", "No history saved.", "Just a space to say what you can’t say anywhere else."];
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +18,9 @@ function App() {
         body: JSON.stringify({ email })
       });
 
+      console.log("Raw response:", res);
       const data = await res.json();
-      console.log("Response received:", data);
+      console.log("Parsed response:", data);
 
       if (res.ok) {
         setMessage(data.message || 'Thanks, you’re on the list!');
