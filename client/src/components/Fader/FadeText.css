@@ -1,0 +1,9 @@
+/* FadeText.css */
+.fade-text {
+    opacity: 1;
+    transition: opacity 1.5s ease-in-out;
+  }
+  
+  .fade-text.hidden {
+    opacity: 0;
+  }
