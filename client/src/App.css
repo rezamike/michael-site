@@ -112,6 +112,17 @@ input {
   box-sizing: border-box;
 }
 
+@media (max-width: 480px) {
+  input {
+    font-size: 1rem;
+    width: 90vw;
+  }
+
+  .container {
+    width: 95vw;
+  }
+}
+
 input:focus {
   outline: none;
   box-shadow: 0 0 8px rgba(255, 126, 95, 0.6);
